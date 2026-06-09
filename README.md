@@ -32,7 +32,7 @@ Target:
 ## Team Members
 
 - Megha K A
-- Team Member 2
+- Tamilarasan
 - Team Member 3
 - Team Member 4
 
