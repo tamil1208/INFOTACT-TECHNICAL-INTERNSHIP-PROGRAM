@@ -105,7 +105,26 @@ Successfully trained first predictive maintenance model and evaluated performanc
 
 Improved handling of rare machine failure cases through data balancing techniques.
 
+## Week 1 — Day 5 Progress
 
+### Completed
+
+- Simulated external contextual data
+- Ambient temperature generation
+- Factory load simulation
+- Humidity simulation
+- Contextual feature engineering
+
+### Ablation Study
+
+Compared:
+
+1. Internal telemetry only
+2. Telemetry + contextual signals
+
+### Outcome
+
+Verified impact of contextual variables on predictive maintenance performance.
 
 ---
 
