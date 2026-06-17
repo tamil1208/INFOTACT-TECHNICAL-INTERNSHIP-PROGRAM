@@ -1,4 +1,4 @@
-# 🚀 Infotact Technical Internship Program 2026
+# 🚀 Infotact Technical Internship Program 2026.
 
 ## Advanced Data Science & Machine Learning Projects
 
