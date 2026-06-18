@@ -1,9 +1,9 @@
-# Contextual Predictive Maintenance (IoT Edge AI)
+ # Contextual Predictive Maintenance (IoT Edge AI)
 
 ## Internship Project
 Infotact Solutions — DSML Internship
 
----
+----
 
 # Project Overview
 
