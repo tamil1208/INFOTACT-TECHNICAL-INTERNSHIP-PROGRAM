@@ -17,7 +17,7 @@ This project focuses on building an advanced Predictive Maintenance system using
 
 The goal is to predict machine failures before they happen.
 
-----
+---
 
 # Week 1 — Day 1 Progress
 
