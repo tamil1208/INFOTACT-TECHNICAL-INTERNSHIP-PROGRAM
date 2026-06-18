@@ -25,7 +25,7 @@ The projects are designed to simulate the workflow followed by deep-tech startup
 * Version control best practices
 * Production-oriented development
 
----
+----
 
 # 🛠 Tech Stack
 
@@ -75,7 +75,7 @@ The projects are designed to simulate the workflow followed by deep-tech startup
 * GitHub Projects
 * GitHub Issues
 
----
+----
 
 # 📂 Repository Structure
 
