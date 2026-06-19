@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manufacturing & Automotive – Contextual Predictive Maintenance (IoT Edge AI)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* ── DARK THEME (default) ── */
+[data-theme="dark"]{
+  --bg:#0a0e1a;--s1:#111827;--s2:#1a2236;--bd:#1e2d45;
+  --tx:#e2e8f0;--mu:#64748b;--cd:#141e30;
+  --nav-bg:rgba(10,14,26,.97);--nav-bd:#1e2d45;
+  --tbl-bd:rgba(30,45,69,.45);
+  --ac:#00d4ff;--ac2:#7c3aed;--ac3:#10b981;--wn:#f59e0b;--dn:#ef4444;
+  --toggle-bg:#1a2236;--toggle-bd:#1e2d45;--toggle-icon:'🌙';
+}
+/* ── LIGHT THEME ── */
+[data-theme="light"]{
+  --bg:#f0f4f8;--s1:#ffffff;--s2:#e8edf3;--bd:#d1dae6;
+  --tx:#0f172a;--mu:#64748b;--cd:#ffffff;
+  --nav-bg:rgba(255,255,255,.96);--nav-bd:#d1dae6;
+  --tbl-bd:rgba(209,218,230,.6);
+  --ac:#0ea5c9;--ac2:#6d28d9;--ac3:#059669;--wn:#d97706;--dn:#dc2626;
+  --toggle-bg:#e2e8f0;--toggle-bd:#cbd5e1;--toggle-icon:'☀️';
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--tx);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;transition:background .3s,color .3s;}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:999;background:var(--nav-bg);backdrop-filter:blur(14px);border-bottom:1px solid var(--nav-bd);display:flex;align-items:center;gap:8px;padding:0 18px;height:54px;transition:background .3s,border-color .3s;}
+.brand{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-right:10px;}
+.brand-dot{width:9px;height:9px;border-radius:50%;background:var(--ac);box-shadow:0 0 8px var(--ac);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.brand-name{font-weight:700;font-size:11.5px;letter-spacing:.04em;color:var(--ac);}
+.tabs{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;flex:1;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:6px 13px;border-radius:6px;font-size:11.5px;font-weight:500;cursor:pointer;border:1px solid transparent;white-space:nowrap;color:var(--mu);transition:all .2s;}
+.tab:hover{color:var(--tx);background:var(--s2);}
+.tab.on{color:var(--ac);border-color:var(--ac);background:rgba(0,180,220,.09);}
+
+/* ── TOGGLE BUTTON ── */
+.theme-toggle{flex-shrink:0;margin-left:8px;width:44px;height:26px;border-radius:13px;background:var(--toggle-bg);border:1.5px solid var(--toggle-bd);cursor:pointer;display:flex;align-items:center;padding:2px;transition:all .3s;position:relative;}
+.toggle-knob{width:20px;height:20px;border-radius:50%;background:var(--ac);display:flex;align-items:center;justify-content:center;font-size:11px;transition:transform .3s,background .3s;transform:translateX(0);}
+[data-theme="light"] .toggle-knob{transform:translateX(18px);background:var(--wn);}
+.theme-label{font-size:10px;font-weight:600;color:var(--mu);white-space:nowrap;letter-spacing:.04em;}
+
+/* ── PAGES ── */
+.pg{display:none;padding:72px 22px 30px;max-width:1380px;margin:0 auto;}
+.pg.on{display:block;}
+.ph{margin-bottom:22px;}
+.ey{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ac);margin-bottom:5px;}
+.ph h1{font-size:21px;font-weight:700;}
+.ph p{font-size:12px;color:var(--mu);margin-top:3px;}
+
+/* ── GRIDS ── */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;}
+
+/* ── CARDS ── */
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;transition:background .3s,border-color .3s;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+.ct{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);margin-bottom:11px;}
+
+/* ── KPI ── */
+.kpi{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;transition:background .3s,border-color .3s;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.kpi.bl::before{background:linear-gradient(90deg,var(--ac),transparent);}
+.kpi.rd::before{background:linear-gradient(90deg,var(--dn),transparent);}
+.kpi.gn::before{background:linear-gradient(90deg,var(--ac3),transparent);}
+.kpi.yl::before{background:linear-gradient(90deg,var(--wn),transparent);}
+.kl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);}
+.kv{font-size:32px;font-weight:800;line-height:1.1;margin:4px 0;}
+.kpi.bl .kv{color:var(--ac);}
+.kpi.rd .kv{color:var(--dn);}
+.kpi.gn .kv{color:var(--ac3);}
+.kpi.yl .kv{color:var(--wn);}
+.ks{font-size:11px;color:var(--mu);}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.tbl th{padding:9px 12px;text-align:left;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);border-bottom:1px solid var(--bd);}
+.tbl td{padding:9px 12px;border-bottom:1px solid var(--tbl-bd);}
+.tbl tr:last-child td{border-bottom:none;}
+.bk{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600;}
+.bg{background:rgba(16,185,129,.14);color:var(--ac3);}
+.br_{background:rgba(239,68,68,.14);color:var(--dn);}
+.by{background:rgba(245,158,11,.14);color:var(--wn);}
+.bb{background:rgba(0,180,220,.12);color:var(--ac);}
+
+/* ── PREDICTOR ── */
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fl{font-size:10px;font-weight:600;color:var(--mu);letter-spacing:.05em;text-transform:uppercase;}
+.fv{font-size:11px;color:var(--ac);font-weight:700;}
+.fr{width:100%;accent-color:var(--ac);}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.pbtn{width:100%;padding:12px;background:linear-gradient(135deg,var(--ac2),var(--ac));border:none;border-radius:9px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;transition:opacity .2s;}
+.pbtn:hover{opacity:.88;}
+.rb{margin-top:13px;padding:16px;border-radius:10px;text-align:center;border:2px solid transparent;display:none;}
+.rb.show{display:block;}
+.rb.fail{background:rgba(239,68,68,.1);border-color:var(--dn);}
+.rb.safe{background:rgba(16,185,129,.1);border-color:var(--ac3);}
+.rl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.rv{font-size:24px;font-weight:900;}
+.rp{font-size:12px;color:var(--mu);margin-top:5px;}
+.pbw{margin-top:10px;height:7px;background:var(--s2);border-radius:4px;overflow:hidden;}
+.pb{height:100%;border-radius:4px;transition:width .6s ease;}
+.rfl{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;justify-content:center;}
+.rp2{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid;}
+
+/* ── SHAP / FI ── */
+.sb{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.sl{font-size:11.5px;color:var(--tx);width:145px;flex-shrink:0;}
+.st{flex:1;height:17px;background:var(--s2);border-radius:4px;overflow:hidden;}
+.sf{height:100%;border-radius:4px;}
+.sv{font-size:10px;color:var(--mu);width:42px;text-align:right;}
+.fir{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+.fii{font-size:10px;color:var(--mu);width:18px;text-align:right;flex-shrink:0;}
+.fil{font-size:11.5px;color:var(--tx);width:138px;flex-shrink:0;}
+.fit{flex:1;height:19px;background:var(--s2);border-radius:4px;overflow:hidden;}
+.fif{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--ac2),var(--ac));}
+.fiv{font-size:10px;color:var(--mu);width:42px;text-align:right;}
+
+/* ── RECOMMENDATIONS ── */
+.rc{display:flex;flex-direction:column;gap:10px;}
+.ri{padding:12px 14px;background:var(--s2);border-radius:9px;border-left:3px solid;display:flex;gap:10px;transition:background .3s;}
+.ri.h{border-color:var(--dn);}
+.ri.m{border-color:var(--wn);}
+.ri.l{border-color:var(--ac3);}
+.rit{font-size:12px;font-weight:700;margin-bottom:3px;}
+.rid{font-size:11px;color:var(--mu);line-height:1.45;}
+.rib{font-size:9px;font-weight:700;padding:1px 7px;border-radius:20px;margin-left:7px;}
+.rib.h{background:rgba(239,68,68,.14);color:var(--dn);}
+.rib.m{background:rgba(245,158,11,.14);color:var(--wn);}
+.rib.l{background:rgba(16,185,129,.14);color:var(--ac3);}
+
+/* ── MISC ── */
+.gw{display:flex;flex-direction:column;align-items:center;margin-top:14px;}
+.hmt{width:100%;border-collapse:collapse;font-size:8.5px;}
+.hmt td,.hmt th{padding:3px 3px;text-align:center;}
+.hmt th{color:var(--mu);font-weight:600;font-size:8px;}
+canvas{display:block;}
+.ins3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px;}
+.inp{padding:14px;background:var(--s2);border-radius:9px;transition:background .3s;}
+.inph{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+.inpb{font-size:12px;line-height:1.5;color:var(--mu);}
+.lf-box{background:var(--s2);border-radius:8px;padding:10px;text-align:center;transition:background .3s;}
+.lf-lbl{font-size:9px;color:var(--mu);font-weight:600;text-transform:uppercase;}
+.lf-val{font-size:16px;font-weight:700;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="brand"><div class="brand-dot"></div><span class="brand-name">Manufacturing & Automotive · IoT Edge AI</span></div>
+  <div class="tabs">
+    <div class="tab on" onclick="go(0)">📊 Executive</div>
+    <div class="tab" onclick="go(1)">📈 Sensors</div>
+    <div class="tab" onclick="go(2)">⚙️ Features</div>
+    <div class="tab" onclick="go(3)">🤖 Models</div>
+    <div class="tab" onclick="go(4)">🔍 XAI / SHAP</div>
+    <div class="tab" onclick="go(5)">🛠️ Predictor</div>
+    <div class="tab" onclick="go(6)">📑 Insights</div>
+  </div>
+  <span class="theme-label" id="theme-lbl">Dark</span>
+  <div class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">
+    <div class="toggle-knob" id="knob">🌙</div>
+  </div>
+</nav>
+
+<!-- ══ PAGE 1: EXECUTIVE ══ -->
+<div class="pg on" id="p0">
+  <div class="ph"><div class="ey">Page 1 of 7 · Infotact Solutions Internship · IoT Edge AI</div><h1>Manufacturing & Automotive — Contextual Predictive Maintenance</h1><p>AI4I 2020 Dataset · 10,000 IoT machine cycles · Real-time edge failure intelligence</p></div>
+  <div class="g4">
+    <div class="kpi bl"><div class="kl">Machines Monitored</div><div class="kv">10,000</div><div class="ks">Total cycles in dataset</div></div>
+    <div class="kpi rd"><div class="kl">Total Failures</div><div class="kv">339</div><div class="ks">Across all failure modes</div></div>
+    <div class="kpi yl"><div class="kl">Failure Rate</div><div class="kv">3.39%</div><div class="ks">Overall machine failures</div></div>
+    <div class="kpi gn"><div class="kl">Uptime Rate</div><div class="kv">96.61%</div><div class="ks">Non-failure cycles</div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ct">Failure vs Non-Failure Distribution</div><div style="height:240px;position:relative;"><canvas id="c_donut"></canvas></div></div>
+    <div class="card"><div class="ct">Failure Count by Machine Type (H / L / M)</div><div style="height:240px;"><canvas id="c_type"></canvas></div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ct">Failure Mode Breakdown — TWF · HDF · PWF · OSF · RNF</div><div style="height:200px;"><canvas id="c_mode"></canvas></div></div>
+    <div class="card"><div class="ct">Failure Rate % by Machine Type</div><div style="height:200px;"><canvas id="c_rate"></canvas></div></div>
+  </div>
+</div>
+
+<!-- ══ PAGE 2: SENSORS ══ -->
+<div class="pg" id="p1">
+  <div class="ph"><div class="ey">Page 2 of 7</div><h1>Sensor Monitoring</h1><p>Live telemetry across 200 machine cycles · Failure events marked with red triangles</p></div>
+  <div class="g2">
+    <div class="card"><div class="ct">Air Temperature (K)</div><div style="height:170px;"><canvas id="c_air"></canvas></div></div>
+    <div class="card"><div class="ct">Process Temperature (K)</div><div style="height:170px;"><canvas id="c_proc"></canvas></div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ct">Rotational Speed (RPM)</div><div style="height:170px;"><canvas id="c_rpm"></canvas></div></div>
+    <div class="card"><div class="ct">Torque (Nm)</div><div style="height:170px;"><canvas id="c_torq"></canvas></div></div>
+  </div>
+  <div class="card"><div class="ct">Tool Wear (min) — Failure events highlighted ▲</div><div style="height:190px;"><canvas id="c_wear"></canvas></div></div>
+</div>
+
+<!-- ══ PAGE 3: FEATURES ══ -->
+<div class="pg" id="p2">
+  <div class="ph"><div class="ey">Page 3 of 7</div><h1>Feature Engineering Analysis</h1><p>Engineered features: Temperature Difference · Power Estimate (RPM×Torque) · Tool Wear Rate</p></div>
+  <div class="g3">
+    <div class="card"><div class="ct">Temp Difference Distribution (K)</div><div style="height:200px;"><canvas id="c_htd"></canvas></div></div>
+    <div class="card"><div class="ct">Power Estimate Distribution</div><div style="height:200px;"><canvas id="c_hpw"></canvas></div></div>
+    <div class="card"><div class="ct">Tool Wear Rate Distribution</div><div style="height:200px;"><canvas id="c_hwr"></canvas></div></div>
+  </div>
+  <div class="card"><div class="ct">Correlation Heatmap — All Features × Machine Failure</div><div id="hm" style="overflow-x:auto;margin-top:6px;"></div></div>
+</div>
+
+<!-- ══ PAGE 4: MODELS ══ -->
+<div class="pg" id="p3">
+  <div class="ph"><div class="ey">Page 4 of 7</div><h1>Model Performance Dashboard</h1><p>Logistic Regression · Random Forest · XGBoost — 8,000 train / 2,000 test · Stratified split</p></div>
+  <div class="g3">
+    <div class="card"><div class="ct">Accuracy Comparison (%)</div><div style="height:200px;"><canvas id="c_acc"></canvas></div></div>
+    <div class="card"><div class="ct">Precision · Recall · F1 Score</div><div style="height:200px;"><canvas id="c_prf"></canvas></div></div>
+    <div class="card"><div class="ct">Cross-Validation Mean F1 (5-Fold)</div><div style="height:200px;"><canvas id="c_cv"></canvas></div></div>
+  </div>
+  <div class="card"><div class="ct">Model Performance Summary Table</div>
+    <table class="tbl"><thead><tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1 Score</th><th>CV F1 (5-fold)</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>Logistic Regression</td><td>85.95%</td><td>17.82%</td><td><span class="bk bg">86.76%</span></td><td>29.57%</td><td>27.61%</td><td><span class="bk bb">Best Recall</span></td></tr>
+      <tr><td><strong>Random Forest ⭐</strong></td><td><span class="bk bg">98.60%</span></td><td><span class="bk bg">90.00%</span></td><td>66.18%</td><td><span class="bk bg">76.27%</span></td><td><span class="bk bg">78.01%</span></td><td><span class="bk bg">Best Overall</span></td></tr>
+      <tr><td>XGBoost</td><td>98.35%</td><td>77.78%</td><td>72.06%</td><td>74.81%</td><td>77.91%</td><td><span class="bk by">Balanced</span></td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- ══ PAGE 5: XAI ══ -->
+<div class="pg" id="p4">
+  <div class="ph"><div class="ey">Page 5 of 7</div><h1>Explainable AI — SHAP Analysis</h1><p>Feature importance via Random Forest · Mean comparison: Failure vs No-Failure cycles</p></div>
+  <div class="g2">
+    <div class="card"><div class="ct">SHAP Summary — Feature Importances</div><div id="shap_div" style="margin-top:10px;"></div></div>
+    <div class="card"><div class="ct">Feature Impact: % Deviation from No-Failure Baseline</div><div style="height:290px;"><canvas id="c_shap"></canvas></div></div>
+  </div>
+</div>
+
+<!-- ══ PAGE 6: PREDICTOR ══ -->
+<div class="pg" id="p5">
+  <div class="ph"><div class="ey">Page 6 of 7</div><h1>Failure Prediction System</h1><p>Adjust sensor sliders to simulate machine conditions · Rule-based RF threshold model</p></div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">Input Sensor Parameters</div>
+      <div class="pgrid">
+        <div class="fg"><label class="fl">Air Temp (K) <span class="fv" id="v_air">300.0 K</span></label><input type="range" class="fr" id="r_air" min="295" max="305" step="0.1" value="300" oninput="uv('v_air',this.value,'K');pred()"></div>
+        <div class="fg"><label class="fl">Process Temp (K) <span class="fv" id="v_proc">310.0 K</span></label><input type="range" class="fr" id="r_proc" min="305" max="315" step="0.1" value="310" oninput="uv('v_proc',this.value,'K');pred()"></div>
+        <div class="fg"><label class="fl">RPM <span class="fv" id="v_rpm">1538</span></label><input type="range" class="fr" id="r_rpm" min="1000" max="3000" step="10" value="1538" oninput="uv('v_rpm',this.value,'');pred()"></div>
+        <div class="fg"><label class="fl">Torque (Nm) <span class="fv" id="v_torq">40.0 Nm</span></label><input type="range" class="fr" id="r_torq" min="3" max="80" step="0.5" value="40" oninput="uv('v_torq',this.value,'Nm');pred()"></div>
+        <div class="fg" style="grid-column:span 2;"><label class="fl">Tool Wear (min) <span class="fv" id="v_wear">107 min</span></label><input type="range" class="fr" id="r_wear" min="0" max="253" step="1" value="107" oninput="uv('v_wear',this.value,'min');pred()"></div>
+      </div>
+      <button class="pbtn" onclick="pred()">⚡ Run Prediction</button>
+      <div id="rb" class="rb">
+        <div class="rl" id="rl"></div>
+        <div class="rv" id="rv"></div>
+        <div class="rp" id="rp_txt"></div>
+        <div class="pbw"><div class="pb" id="pb"></div></div>
+        <div class="rfl" id="rfl"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">Live Failure Probability Gauge</div>
+      <div class="gw">
+        <canvas id="c_gauge" width="280" height="155"></canvas>
+        <div id="gpct" style="font-size:28px;font-weight:900;color:var(--ac);margin-top:-14px;">0%</div>
+        <div style="font-size:11px;color:var(--mu);">Failure Probability</div>
+      </div>
+      <div style="margin-top:16px;">
+        <div class="ct">Engineered Features (Live)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px;">
+          <div class="lf-box"><div class="lf-lbl">ΔTemp</div><div class="lf-val" id="lf_dt" style="color:var(--ac);">10.0K</div></div>
+          <div class="lf-box"><div class="lf-lbl">Power</div><div class="lf-val" id="lf_pw" style="color:var(--ac2);">61.5K</div></div>
+          <div class="lf-box"><div class="lf-lbl">Wear Rate</div><div class="lf-val" id="lf_wr" style="color:var(--ac3);">3.93</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE 7: INSIGHTS ══ -->
+<div class="pg" id="p6">
+  <div class="ph"><div class="ey">Page 7 of 7</div><h1>Insights & Recommendations</h1><p>Actionable IoT edge maintenance strategies · Manufacturing & Automotive · AI4I 2020 analysis</p></div>
+  <div class="g2">
+    <div class="card"><div class="ct">Top 8 Predictive Features (Random Forest)</div><div id="fi_div" style="margin-top:10px;"></div></div>
+    <div class="card"><div class="ct">Maintenance Recommendations</div>
+      <div class="rc">
+        <div class="ri h"><div style="font-size:18px;">🔴</div><div><div class="rit">High Torque Alert <span class="rib h">CRITICAL</span></div><div class="rid">Torque > 65 Nm → 4× higher failure rate. Alert immediately when sustained torque exceeds 60 Nm. Primary driver of OSF failures (98 events).</div></div></div>
+        <div class="ri h"><div style="font-size:18px;">🔴</div><div><div class="rit">Low RPM + High Torque <span class="rib h">CRITICAL</span></div><div class="rid">RPM < 1300 + torque > 55 Nm triggers Power Failure (PWF). Maintain speed above 1350 under load. 95 PWF events recorded.</div></div></div>
+        <div class="ri m"><div style="font-size:18px;">🟡</div><div><div class="rit">Tool Replacement Schedule <span class="rib m">HIGH</span></div><div class="rid">Mean wear at failure = 143.8 min vs 106.7 min healthy. Replace tools proactively at 120–130 min to prevent TWF (46 events).</div></div></div>
+        <div class="ri m"><div style="font-size:18px;">🟡</div><div><div class="rit">Temperature Differential Alert <span class="rib m">MEDIUM</span></div><div class="rid">ΔTemp < 8.6 K causes HDF. 115 events = 34% of all failures. Trigger cooling check when ΔT drops below 8.6 K.</div></div></div>
+        <div class="ri l"><div style="font-size:18px;">🟢</div><div><div class="rit">Deploy Random Forest <span class="rib l">RECOMMENDED</span></div><div class="rid">98.6% accuracy · 90% precision · 78% CV F1. Run inference every 10 cycles. ~76% of failures preventable.</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:0;">
+    <div class="ct">Key Business Insights</div>
+    <div class="ins3">
+      <div class="inp" style="border-left:3px solid var(--dn);border-radius:0 9px 9px 0;"><div class="inph" style="color:var(--dn);">Root Cause</div><div class="inpb">HDF (34%) is most common. Caused when process–air ΔTemp < 8.5 K — indicating cooling degradation. Continuously monitor ΔT.</div></div>
+      <div class="inp" style="border-left:3px solid var(--wn);border-radius:0 9px 9px 0;"><div class="inph" style="color:var(--wn);">Top Feature</div><div class="inpb">Power Estimate (RPM × Torque) explains 18.43% of variance. Combined with Rotational Speed (22.27%), these two features drive most predictions.</div></div>
+      <div class="inp" style="border-left:3px solid var(--ac3);border-radius:0 9px 9px 0;"><div class="inph" style="color:var(--ac3);">ROI Impact</div><div class="inpb">L-type machines lead with 235 failures (3.92% rate). RF's 76.3% F1 enables early detection of 76% of failures — dramatically reducing downtime costs.</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ THEME ═══════════════════════════════════════════════════════
+let isDark = true;
+function toggleTheme(){
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  document.getElementById('knob').textContent = isDark ? '🌙' : '☀️';
+  document.getElementById('theme-lbl').textContent = isDark ? 'Dark' : 'Light';
+  Chart.defaults.color = isDark ? '#64748b' : '#64748b';
+  Chart.defaults.borderColor = isDark ? '#1e2d45' : '#d1dae6';
+  rebuildCharts();
+  buildHeatmap();
+  drawGauge(lastScore);
+}
+
+// ══ DATA ════════════════════════════════════════════════════════
+const AIR=[298.1,298.2,298.1,298.2,298.2,298.1,298.1,298.1,298.3,298.5,298.4,298.6,298.6,298.6,298.6,298.6,298.6,298.7,298.8,298.9,298.9,298.8,298.9,299.0,299.0,299.0,299.1,299.1,299.1,299.0,299.1,299.0,299.0,298.9,298.8,298.8,298.9,298.8,298.9,298.8,298.8,298.8,298.8,298.8,298.8,298.8,298.7,298.8,298.8,298.9,298.9,298.9,298.8,298.7,298.7,298.8,298.8,298.8,298.8,298.8,298.8,298.8,298.8,298.9,299.0,299.0,298.9,298.8,298.8,298.9,298.9,298.9,298.9,299.0,298.9,298.8,298.8,298.8,298.8,298.8,298.8,298.9,298.9,299.0,298.9,299.0,299.0,299.0,299.0,298.9,298.9,298.9,298.9,299.1,299.0,299.0,299.0,298.9,298.9,298.8,298.8,298.8,298.8,298.8,298.8,298.8,298.8,298.8,298.9,298.9,298.8,298.7,298.8,298.8,298.8,298.8,298.9,298.8,298.8,298.7,298.9,298.9,299.0,298.9,298.9,298.9,299.0,298.9,299.0,298.9,298.8,298.8,298.7,298.7,298.8,298.8,298.7,298.7,298.8,298.8,298.8,298.7,298.6,298.6,298.6,298.5,298.5,298.4,298.3,298.4,298.4,298.4,298.4,298.4,298.4,298.4,298.4,298.4,298.4,298.4,298.4,298.3,298.3,298.4,298.5,298.5,298.4,298.4,298.4,298.4,298.4,298.2,298.1,298.2,298.2,298.2,298.2,298.2,298.2,298.2,298.2,298.2,298.1,298.1,298.2,298.2,298.1,298.2,298.3,298.3,298.2,298.2,298.2,298.2,298.2,298.3,298.3,298.4,298.4,298.4];
+const PROC=[308.6,308.7,308.5,308.6,308.7,308.6,308.6,308.6,308.7,309.0,308.9,309.1,309.1,309.2,309.2,309.2,309.2,309.2,309.2,309.3,309.3,309.3,309.3,309.4,309.4,309.5,309.5,309.4,309.4,309.4,309.5,309.4,309.4,309.3,309.1,309.2,309.2,309.1,309.2,309.1,309.1,309.1,309.1,309.2,309.1,309.1,309.0,309.1,309.2,309.2,309.1,309.1,309.0,309.0,309.0,309.1,309.1,309.1,309.0,309.1,309.1,309.0,309.0,309.0,309.1,309.1,308.9,308.9,308.9,309.0,309.0,309.1,309.1,309.1,309.0,308.9,308.9,308.9,308.9,308.9,308.8,308.9,308.9,309.0,308.9,309.0,309.0,309.0,309.0,308.9,308.9,308.9,308.9,309.0,308.9,309.0,309.0,308.9,308.8,308.8,308.9,308.8,308.8,308.8,308.7,308.7,308.7,308.8,308.8,308.7,308.6,308.6,308.7,308.6,308.6,308.6,308.7,308.6,308.6,308.5,308.7,308.7,308.8,308.7,308.7,308.6,308.6,308.6,308.6,308.5,308.4,308.4,308.4,308.4,308.4,308.5,308.5,308.6,308.6,308.6,308.6,308.5,308.4,308.4,308.4,308.4,308.4,308.4,308.3,308.3,308.3,308.2,308.2,308.2,308.2,308.2,308.1,308.2,308.2,308.2,308.2,308.1,308.1,308.2,308.3,308.4,308.2,308.3,308.3,308.3,308.2,308.1,308.0,308.0,308.1,308.1,308.1,308.2,308.2,308.3,308.3,308.3,308.2,308.2,308.2,308.2,308.3,308.4,308.5,308.4,308.4,308.4,308.4,308.4,308.5,308.5,308.6,308.6,308.7,308.6];
+const RPM=[1551,1408,1498,1433,1408,1425,1558,1527,1667,1741,1782,1423,1339,1742,2035,1542,1311,1410,1306,1632,1375,1450,1581,1758,1561,1861,1512,1811,1439,1693,1339,1798,1419,1665,1559,1452,1581,1439,1379,1350,1362,1368,1368,1372,1472,1489,1843,1418,1425,1412,2861,1383,1497,1565,1691,1512,1477,1513,1661,1378,1393,1592,1829,1812,1523,1394,1679,1466,1527,1410,1924,1452,1369,1592,1601,1379,1461,1455,1398,1402,1445,1450,1453,1469,1422,1804,1436,1544,1419,1487,1753,1830,1727,1450,1622,1351,1575,1750,1529,1523,1852,1991,1555,1441,1450,1591,1445,1497,1621,1572,1872,1499,1498,1486,1680,1431,1564,1599,1707,1467,1433,1558,1310,1546,1727,1560,1329,1413,1587,1559,1473,1737,1441,1430,1369,1711,1420,1297,1449,1268,1511,1544,1778,1407,1391,1513,1612,1515,1379,1473,1422,1463,1584,1850,1528,1987,1495,1478,1499,1471,1282,1412,1586,1468,1440,1733,1612,1458,1433,1318,1610,1462,1924,1591,1306,1382,1618,1988,1436,1304,1475,1824,1342,1485,1667,1446,1301,1379,1606,1539,1477,1666,1398,1678,2678,1453,1432,1527,1588,1433];
+const TORQ=[42.8,46.3,49.4,39.5,40.0,41.9,42.4,40.2,28.6,28.0,23.9,44.3,51.1,30.0,19.6,48.4,46.6,45.6,54.5,32.5,42.7,44.8,30.7,25.7,37.3,23.3,39.0,24.6,44.2,30.1,48.2,25.5,48.3,32.5,34.7,48.6,36.7,39.2,50.7,52.5,45.4,50.8,49.1,48.5,47.5,49.1,25.8,46.3,53.9,44.1,4.6,54.9,43.8,35.1,30.1,40.7,42.4,40.3,29.5,54.4,52.6,38.2,22.9,25.9,38.6,45.1,28.7,44.1,32.4,65.7,22.6,45.5,44.4,35.0,32.3,46.7,47.9,41.3,51.5,37.9,49.9,47.5,40.8,40.1,47.6,26.8,43.9,31.8,45.2,39.5,25.8,24.9,27.1,43.0,31.9,52.2,35.3,29.9,32.7,44.4,25.0,20.7,40.6,40.5,43.4,31.1,48.5,46.8,32.7,34.1,22.5,43.5,39.5,41.9,29.4,45.7,34.1,33.0,28.1,40.7,44.7,41.2,50.7,43.4,29.4,32.2,60.5,46.5,38.6,34.3,41.1,27.7,43.2,49.6,53.0,28.5,45.7,55.3,49.4,55.8,36.1,35.2,28.2,50.5,42.4,33.6,36.1,40.1,48.0,39.9,42.7,37.6,41.0,27.0,36.2,19.8,46.0,43.5,40.0,47.0,60.7,52.3,35.5,43.8,43.6,26.0,32.6,42.9,62.3,59.1,35.0,50.8,20.8,33.7,58.3,43.5,34.7,21.4,50.2,49.8,49.9,24.2,48.1,40.7,30.6,38.2,56.0,43.1,33.6,43.4,49.9,34.6,51.8,34.6,10.7,42.9,49.5,40.9,35.0,47.1];
+const WEAR=[0,3,5,7,9,11,14,16,18,21,24,29,34,37,40,42,44,47,50,55,58,63,65,68,70,73,75,77,82,84,86,89,91,93,95,98,101,104,106,111,113,115,117,120,125,128,130,133,135,140,143,145,147,152,154,156,158,160,162,165,167,169,172,174,177,179,181,184,189,191,193,196,198,200,202,204,206,208,0,2,4,9,11,13,15,17,20,25,27,30,33,35,37,40,42,44,47,50,53,55,57,59,61,63,66,68,70,72,75,80,82,84,89,92,95,97,99,101,103,106,108,110,112,114,116,118,120,122,124,126,128,130,132,135,138,140,143,148,150,155,157,159,161,164,169,172,174,179,181,184,186,188,191,194,196,198,203,206,211,214,216,218,0,2,5,8,10,15,20,22,24,27,29,32,35,37,39,41,43,45,47,49,54,57,59,61,63,65,67,69,72,74,76,81,86,89,91,96,99,101];
+const FAIL=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0];
+const HIST_TD={labels:["7.6","7.8","8.1","8.3","8.6","8.8","9.1","9.3","9.6","9.8","10.1","10.4","10.6","10.9","11.1","11.4","11.6","11.9"],counts:[134,141,184,261,445,732,1078,1103,986,545,371,428,674,956,1148,578,152,84]};
+const HIST_PW={labels:["10.9K","16.5K","22.1K","27.7K","33.2K","38.8K","44.3K","49.9K","55.5K","61.0K","66.6K","72.2K","77.7K","83.3K","88.9K","94.4K"],counts:[5,1,5,20,147,441,993,1660,2172,1984,1443,718,294,85,26,6]};
+const HIST_WR={labels:["0.0","0.7","1.4","2.1","2.8","3.5","4.2","4.9","5.6","6.3","7.0","7.6","8.3","9.0","9.7","10.4"],counts:[903,809,807,814,807,828,798,809,834,760,717,567,370,140,28,9]};
+const CORR_C=["Air Temp","Proc Temp","RPM","Torque","Tool Wear","dT","Power","Wear Rate","Failure"];
+const CORR_D=[[1.0,0.876,0.023,-0.014,0.014,-0.7,-0.011,0.011,0.083],[0.876,1.0,0.019,-0.014,0.013,-0.268,-0.011,0.01,0.036],[0.023,0.019,1.0,-0.875,0.0,-0.017,-0.806,-0.163,-0.044],[-0.014,-0.014,-0.875,1.0,-0.003,0.007,0.979,0.151,0.191],[0.014,0.013,0.0,-0.003,1.0,-0.008,-0.003,0.981,0.105],[-0.7,-0.268,-0.017,0.007,-0.008,1.0,0.007,-0.006,-0.112],[-0.011,-0.011,-0.806,0.979,-0.003,0.007,1.0,0.136,0.176],[0.011,0.01,-0.163,0.151,0.981,-0.006,0.136,1.0,0.13],[0.083,0.036,-0.044,0.191,0.105,-0.112,0.176,0.13,1.0]];
+const FI=[["Rotational Speed",22.27],["Torque",18.57],["Power Estimate",18.43],["Tool Wear Rate",12.32],["Tool Wear (min)",11.80],["Temp Diff",9.14],["Air Temp",4.77],["Process Temp",2.70]];
+const SHAP_F=[300.89,310.29,1496.49,50.17,143.78];
+const SHAP_N=[299.97,310.00,1540.26,39.63,106.69];
+const SHAP_L=["Air Temp","Proc Temp","RPM","Torque","Tool Wear"];
+
+// ══ COLORS ══════════════════════════════════════════════════════
+function getAC(){return isDark?'#00d4ff':'#0ea5c9';}
+function getGN(){return isDark?'#10b981':'#059669';}
+function getRD(){return isDark?'#ef4444':'#dc2626';}
+function getYL(){return isDark?'#f59e0b':'#d97706';}
+function getPU(){return isDark?'#7c3aed':'#6d28d9';}
+function getGrid(){return isDark?'#1e2d45':'#e2e8f0';}
+function getTxt(){return '#64748b';}
+function ra(h,a){const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return `rgba(${r},${g},${b},${a})`;}
+
+// ══ CHART REGISTRY ══════════════════════════════════════════════
+const charts={};
+const idx200=Array.from({length:200},(_,i)=>i+1+'');
+
+function destroyAll(){Object.keys(charts).forEach(k=>{if(charts[k]){charts[k].destroy();delete charts[k];}});}
+
+function rebuildCharts(){
+  destroyAll();
+  Chart.defaults.color=getTxt();
+  Chart.defaults.borderColor=getGrid();
+  buildP1();buildP2();buildP3();buildP4();buildP5();buildFI();buildSHAP();
+}
+
+function buildP1(){
+  charts.donut=new Chart(document.getElementById('c_donut'),{type:'doughnut',data:{labels:['Non-Failure (9,661)','Failure (339)'],datasets:[{data:[9661,339],backgroundColor:[ra(getGN(),.75),ra(getRD(),.85)],borderColor:isDark?'#0a0e1a':'#f0f4f8',borderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,cutout:'66%',plugins:{legend:{position:'bottom',labels:{color:isDark?'#e2e8f0':'#0f172a',font:{size:11}}}}}});
+  charts.type=new Chart(document.getElementById('c_type'),{type:'bar',data:{labels:['High (H)','Low (L)','Medium (M)'],datasets:[{label:'Failures',data:[21,235,83],backgroundColor:ra(getRD(),.85),borderRadius:5},{label:'Healthy',data:[982,5765,2914],backgroundColor:ra(getGN(),.45),borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:isDark?'#e2e8f0':'#0f172a'}}},scales:{x:{grid:{display:false}},y:{grid:{color:getGrid()}}}}});
+  charts.mode=new Chart(document.getElementById('c_mode'),{type:'bar',data:{labels:['TWF (46)','HDF (115)','PWF (95)','OSF (98)','RNF (19)'],datasets:[{data:[46,115,95,98,19],backgroundColor:[ra(getYL(),.85),ra(getRD(),.85),ra(getPU(),.85),ra(getAC(),.85),ra(getGN(),.85)],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:getGrid()}},y:{grid:{display:false}}}}});
+  charts.rate=new Chart(document.getElementById('c_rate'),{type:'bar',data:{labels:['High (H)','Low (L)','Medium (M)'],datasets:[{label:'Failure Rate %',data:[2.09,3.92,2.77],backgroundColor:[ra(getAC(),.85),ra(getRD(),.85),ra(getYL(),.85)],borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{max:5,ticks:{callback:v=>v+'%'},grid:{color:getGrid()}}}}});
+}
+
+function mkLine(id,data,color,label,key){
+  charts[key]=new Chart(document.getElementById(id),{type:'line',data:{labels:idx200,datasets:[{label,data,borderColor:color,backgroundColor:ra(color,.06),tension:.35,borderWidth:1.6,pointRadius:0,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:8,color:getTxt()},grid:{display:false}},y:{grid:{color:getGrid()}}}}});
+}
+function buildP2(){
+  mkLine('c_air',AIR,getAC(),'Air Temp','air');
+  mkLine('c_proc',PROC,getYL(),'Process Temp','proc');
+  mkLine('c_rpm',RPM,getGN(),'RPM','rpm');
+  mkLine('c_torq',TORQ,getPU(),'Torque','torq');
+  const failPts=WEAR.map((v,i)=>FAIL[i]===1?v:null);
+  charts.wear=new Chart(document.getElementById('c_wear'),{type:'line',data:{labels:idx200,datasets:[{label:'Tool Wear (min)',data:WEAR,borderColor:getYL(),backgroundColor:ra(getYL(),.06),tension:.3,borderWidth:1.6,pointRadius:0,fill:true},{label:'Failure ▲',data:failPts,borderColor:'transparent',backgroundColor:getRD(),pointRadius:8,pointStyle:'triangle',showLine:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:isDark?'#e2e8f0':'#0f172a'}}},scales:{x:{ticks:{maxTicksLimit:10,color:getTxt()},grid:{display:false}},y:{grid:{color:getGrid()}}}}});
+}
+
+function mkHist(id,h,color,key){
+  charts[key]=new Chart(document.getElementById(id),{type:'bar',data:{labels:h.labels,datasets:[{data:h.counts,backgroundColor:ra(color,.78),borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:7,color:getTxt()},grid:{display:false}},y:{grid:{color:getGrid()}}}}});
+}
+function buildP3(){
+  mkHist('c_htd',HIST_TD,getAC(),'htd');
+  mkHist('c_hpw',HIST_PW,getPU(),'hpw');
+  mkHist('c_hwr',HIST_WR,getGN(),'hwr');
+}
+
+function buildP4(){
+  const MODELS=['LR','RF','XGB'];
+  const lc=isDark?'#e2e8f0':'#0f172a';
+  charts.acc=new Chart(document.getElementById('c_acc'),{type:'bar',data:{labels:MODELS,datasets:[{data:[85.95,98.60,98.35],backgroundColor:[ra(getAC(),.65),ra(getGN(),.85),ra(getYL(),.78)],borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{min:80,max:100,ticks:{callback:v=>v+'%'},grid:{color:getGrid()}}}}});
+  charts.prf=new Chart(document.getElementById('c_prf'),{type:'bar',data:{labels:MODELS,datasets:[{label:'Precision',data:[17.82,90.00,77.78],backgroundColor:ra(getAC(),.75),borderRadius:4},{label:'Recall',data:[86.76,66.18,72.06],backgroundColor:ra(getGN(),.75),borderRadius:4},{label:'F1',data:[29.57,76.27,74.81],backgroundColor:ra(getPU(),.75),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:lc}}},scales:{x:{grid:{display:false}},y:{max:100,ticks:{callback:v=>v+'%'},grid:{color:getGrid()}}}}});
+  charts.cv=new Chart(document.getElementById('c_cv'),{type:'bar',data:{labels:MODELS,datasets:[{data:[27.61,78.01,77.91],backgroundColor:[ra(getAC(),.65),ra(getGN(),.85),ra(getYL(),.78)],borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>v+'%'},grid:{color:getGrid()}}}}});
+}
+
+function buildP5(){
+  const lc=isDark?'#e2e8f0':'#0f172a';
+  charts.shap=new Chart(document.getElementById('c_shap'),{type:'bar',data:{labels:SHAP_L,datasets:[{label:'% Δ vs No-Failure',data:SHAP_F.map((v,i)=>parseFloat(((v-SHAP_N[i])/Math.abs(SHAP_N[i])*100).toFixed(2))),backgroundColor:ra(getRD(),.78),borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{labels:{color:lc}},tooltip:{callbacks:{label:c=>`${c.raw>0?'+':''}${c.raw}% vs no-failure`}}},scales:{x:{grid:{color:getGrid()},ticks:{callback:v=>`${v>0?'+':''}${v}%`}},y:{grid:{display:false}}}}});
+}
+
+const SC=['#00d4ff','#10b981','#7c3aed','#f59e0b','#ef4444','#ec4899','#8b5cf6','#06b6d4'];
+function buildSHAP(){
+  const maxFI=FI[0][1];
+  document.getElementById('shap_div').innerHTML=FI.map(([l,v],i)=>`<div class="sb"><div class="sl">${l}</div><div class="st"><div class="sf" style="width:${(v/maxFI*100).toFixed(0)}%;background:${SC[i]};"></div></div><div class="sv">${v.toFixed(2)}%</div></div>`).join('');
+}
+function buildFI(){
+  const maxFI=FI[0][1];
+  document.getElementById('fi_div').innerHTML=FI.map(([l,v],i)=>`<div class="fir"><div class="fii">${i+1}</div><div class="fil">${l}</div><div class="fit"><div class="fif" style="width:${(v/maxFI*100).toFixed(0)}%;"></div></div><div class="fiv">${v.toFixed(2)}%</div></div>`).join('');
+}
+
+// ══ HEATMAP ═════════════════════════════════════════════════════
+function buildHeatmap(){
+  function corrColor(v){const a=Math.min(Math.abs(v)*.85+.05,1);return v>=0?`rgba(0,180,210,${a.toFixed(2)})`:`rgba(220,38,38,${a.toFixed(2)})`;}
+  let ht='<table class="hmt"><thead><tr><th></th>'+CORR_C.map(c=>`<th>${c}</th>`).join('')+'</tr></thead><tbody>';
+  CORR_D.forEach((row,r)=>{ht+=`<tr><th style="text-align:right;padding-right:5px;font-size:8px;color:var(--mu);">${CORR_C[r]}</th>`;row.forEach(v=>{ht+=`<td style="background:${corrColor(v)};border-radius:3px;font-weight:600;font-size:8px;color:${Math.abs(v)>.35?'#fff':'var(--mu)'};min-width:38px;padding:4px 2px;">${v.toFixed(2)}</td>`;});ht+='</tr>';});
+  document.getElementById('hm').innerHTML=ht+'</tbody></table>';
+}
+
+// ══ GAUGE ═══════════════════════════════════════════════════════
+let lastScore=0;
+function drawGauge(pct){
+  lastScore=pct;
+  const cv=document.getElementById('c_gauge');if(!cv)return;
+  const ctx=cv.getContext('2d');ctx.clearRect(0,0,280,155);
+  const cx=140,cy=148,r=108;
+  ctx.beginPath();ctx.arc(cx,cy,r,Math.PI,2*Math.PI);ctx.lineWidth=18;ctx.strokeStyle=isDark?'#1a2236':'#e2e8f0';ctx.stroke();
+  if(pct>0){const fe=Math.PI+(pct/100)*Math.PI;const g=ctx.createLinearGradient(32,148,248,148);g.addColorStop(0,getGN());g.addColorStop(.5,getYL());g.addColorStop(1,getRD());ctx.beginPath();ctx.arc(cx,cy,r,Math.PI,fe);ctx.lineWidth=18;ctx.strokeStyle=g;ctx.lineCap='round';ctx.stroke();}
+  const na=Math.PI+(pct/100)*Math.PI;ctx.save();ctx.translate(cx,cy);ctx.rotate(na);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(r-16,0);ctx.lineWidth=2.5;ctx.strokeStyle=isDark?'#e2e8f0':'#0f172a';ctx.stroke();ctx.restore();
+  const gp=document.getElementById('gpct');gp.textContent=pct.toFixed(1)+'%';
+  gp.style.color=pct<25?getGN():pct<55?getYL():getRD();
+}
+
+// ══ PREDICTION ══════════════════════════════════════════════════
+function uv(id,v,unit){document.getElementById(id).textContent=parseFloat(v).toFixed(unit===''?0:1)+(unit?' '+unit:'');}
+function pred(){
+  const air=+document.getElementById('r_air').value;
+  const proc=+document.getElementById('r_proc').value;
+  const rpm=+document.getElementById('r_rpm').value;
+  const torq=+document.getElementById('r_torq').value;
+  const wear=+document.getElementById('r_wear').value;
+  const dt=proc-air,pw=rpm*torq,wr=wear/(rpm/60);
+  document.getElementById('lf_dt').textContent=dt.toFixed(1)+'K';
+  document.getElementById('lf_pw').textContent=(pw/1000).toFixed(1)+'K';
+  document.getElementById('lf_wr').textContent=wr.toFixed(2);
+  let s=0;const flags=[];
+  if(torq>65){s+=35;flags.push({t:'High Torque',d:'danger'});}else if(torq>55){s+=20;flags.push({t:'Elevated Torque',d:'warn'});}
+  if(rpm<1300){s+=25;flags.push({t:'Low RPM',d:'danger'});}else if(rpm<1400){s+=12;flags.push({t:'RPM Alert',d:'warn'});}
+  if(wear>130){s+=20;flags.push({t:'High Tool Wear',d:'danger'});}else if(wear>110){s+=10;flags.push({t:'Wear Alert',d:'warn'});}
+  if(dt<8.6){s+=15;flags.push({t:'Low ΔTemp (HDF)',d:'danger'});}
+  if(pw>80000){s+=10;flags.push({t:'High Power Load',d:'warn'});}
+  if(wr>8){s+=5;flags.push({t:'High Wear Rate',d:'warn'});}
+  s=Math.min(s,98);
+  const rb=document.getElementById('rb');rb.classList.add('show');
+  const isF=s>=30;rb.className='rb show '+(isF?'fail':'safe');
+  document.getElementById('rl').textContent=isF?'⚠ FAILURE PREDICTED':'✓ MACHINE HEALTHY';
+  document.getElementById('rv').textContent=isF?'🔴 FAILURE RISK':'🟢 SAFE TO OPERATE';
+  document.getElementById('rv').style.color=isF?getRD():getGN();
+  document.getElementById('rp_txt').textContent=`Failure Probability: ${s.toFixed(1)}%`;
+  const pb=document.getElementById('pb');pb.style.width=s+'%';pb.style.background=s<30?getGN():s<55?getYL():getRD();
+  document.getElementById('rfl').innerHTML=flags.map(f=>`<div class="rp2" style="border-color:${f.d==='danger'?getRD():getYL()};color:${f.d==='danger'?getRD():getYL()};">${f.t}</div>`).join('');
+  drawGauge(s);
+}
+
+// ══ PAGE NAV ════════════════════════════════════════════════════
+function go(i){
+  document.querySelectorAll('.pg').forEach((p,j)=>p.classList.toggle('on',j===i));
+  document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('on',j===i));
+  if(i===5)setTimeout(()=>{uv('v_air','300.0','K');uv('v_proc','310.0','K');uv('v_rpm','1538','');uv('v_torq','40.0','Nm');uv('v_wear','107','min');pred();},60);
+}
+
+// ══ INIT ════════════════════════════════════════════════════════
+Chart.defaults.color=getTxt();
+Chart.defaults.borderColor=getGrid();
+buildP1();buildP2();buildP3();buildP4();buildP5();buildSHAP();buildFI();buildHeatmap();
+setTimeout(()=>drawGauge(0),100);
+</script>
+</body>
+</html>
