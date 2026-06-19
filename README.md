@@ -94,112 +94,174 @@ The projects are designed to simulate the workflow followed by deep-tech startup
 ---
 🚀 Manufacturing & Automotive – Contextual Predictive Maintenance (IoT Edge AI)
 
+🚀 Contextual Predictive Maintenance using IoT Edge AI
+Advanced Data Science & Machine Learning Project
+
 🔗 Live Dashboard: https://predictivemaintencedashborad.netlify.app/
 
 📌 Project Overview
 
-This project focuses on Predictive Maintenance for Manufacturing and Automotive Industries using the AI4I 2020 dataset. The dashboard analyzes IoT sensor data from industrial machines to predict potential failures, reduce downtime, and improve maintenance planning. The solution combines Machine Learning, Explainable AI (SHAP), and interactive visual analytics.
+This project develops an intelligent predictive maintenance system for manufacturing environments by combining machine telemetry data, contextual feature engineering, machine learning models, and explainable AI techniques.
 
-🎯 Objectives
-Monitor machine health using real-time sensor data
-Detect potential machine failures before they occur
-Analyze failure patterns and root causes
-Provide explainable predictions using SHAP
-Support maintenance decision-making with actionable insights
+The objective is to predict machine failures before they occur, enabling proactive maintenance, reducing downtime, and improving operational efficiency.
+
+🎯 Business Problem
+
+Unexpected machine failures can result in:
+
+Production downtime
+Increased maintenance costs
+Equipment damage
+Reduced operational efficiency
+
+This solution uses predictive analytics to identify potential failures early and support data-driven maintenance decisions.
+
 📊 Dataset
+
 AI4I 2020 Predictive Maintenance Dataset
-10,000 machine cycles
-339 failure events
-5 failure modes:
+
+Features include:
+
+Air Temperature
+Process Temperature
+Rotational Speed (RPM)
+Torque
+Tool Wear
+Product Type
+
+Target Variable:
+
+Machine Failure (0 = No Failure, 1 = Failure)
+
+Failure Categories:
+
 Tool Wear Failure (TWF)
 Heat Dissipation Failure (HDF)
 Power Failure (PWF)
 Overstrain Failure (OSF)
 Random Failure (RNF)
-🛠️ Technologies Used
+🛠️ Technology Stack
+Programming
 Python
+Data Analysis
 Pandas
 NumPy
+Machine Learning
 Scikit-Learn
-Random Forest
 XGBoost
+Random Forest
+Logistic Regression
+K-Nearest Neighbors
+Explainable AI
 SHAP
+Visualization
 Plotly
-Power BI Concepts
-HTML, CSS, JavaScript
-Netlify Deployment
-🔍 Feature Engineering
+Matplotlib
+Seaborn
+Deployment
+Netlify
+⚙️ Feature Engineering
 
-Created additional features to improve model performance:
+Custom engineered features include:
 
 Temperature Difference
-Power Estimate (RPM × Torque)
+
+Temperature Difference = Process Temperature − Air Temperature
+
+Power Estimate
+
+Power = Rotational Speed × Torque
+
 Tool Wear Rate
+
+Tool Wear normalized against operational conditions.
+
 🤖 Machine Learning Models
-Model	Accuracy
-Logistic Regression	85.95%
-Random Forest	98.60% ⭐
-XGBoost	98.35%
 
-Best Model: Random Forest
+Models evaluated:
 
+Logistic Regression
+Decision Tree
+Random Forest
+K-Nearest Neighbors
+XGBoost
+Best Performing Model
+
+Random Forest Classifier
+
+Performance Metrics:
+
+Accuracy: 98.60%
 Precision: 90%
 F1 Score: 76.27%
-Cross Validation F1: 78.01%
+Cross Validation F1 Score: 78.01%
 📈 Dashboard Features
-Executive Overview
-Sensor Monitoring
-Feature Engineering Analysis
-Model Performance Dashboard
-Explainable AI (SHAP)
-Failure Prediction System
+Executive Summary
+Failure statistics
+Machine health overview
+KPI monitoring
+Sensor Analytics
+Temperature trends
+Torque analysis
+RPM monitoring
+Feature Engineering Insights
+Engineered feature impact
+Correlation analysis
+Model Evaluation
+Accuracy comparison
+Confusion matrix
+ROC-AUC analysis
+Explainable AI
+SHAP Summary Plot
+Feature Importance
+Local Prediction Explanations
 Maintenance Recommendations
-Business Insights
-🔬 Explainable AI
+Failure risk assessment
+Preventive maintenance actions
+Operational insights
+🔍 Explainable AI (SHAP)
 
-SHAP analysis is used to:
+SHAP analysis helps:
 
-Identify important features
-Explain prediction outcomes
-Understand machine failure drivers
-Improve model transparency
-💡 Key Insights
-Heat Dissipation Failure (HDF) is the most common failure mode.
+Understand model predictions
+Identify key failure drivers
+Increase model transparency
+Support maintenance decision-making
+📌 Key Insights
+Heat Dissipation Failure is the most common failure type.
 High torque significantly increases failure probability.
-Tool wear is a strong indicator of machine breakdown.
-Random Forest provides the best overall performance.
+Tool wear strongly influences machine breakdown.
+Feature engineering improves predictive performance.
+Random Forest provides the best balance between accuracy and interpretability.
 🌐 Live Demo
 
-🔗 https://predictivemaintencedashborad.netlify.app
+https://predictivemaintencedashborad.netlify.app/
 
-# 📌 Project 1: Contextual Predictive Maintenance (IoT Edge AI)
+📂 Repository Structure
+├── data/
+├── notebooks/
+├── models/
+├── dashboard/
+├── src/
+├── reports/
+├── README.md
+└── requirements.txt
+🚀 Future Improvements
+Real-time IoT sensor integration
+Edge AI deployment
+Predictive maintenance alerts
+Cloud-based monitoring system
+Digital twin integration
+👨‍💻 Author
 
-## Objective
+Tamilarasan P
 
-Develop an intelligent predictive maintenance system by combining:
+B.Tech – Computer Science & Engineering
+SRM Institute of Science and Technology
 
-* Internal IoT telemetry
-* External environmental signals
+GitHub: https://github.com/tamil1208
 
-to predict machine failures before they occur.
-
----
-
-## Key Features
-
-✅ Time-series signal processing
-
-✅ Contextual data fusion
-
-✅ Feature engineering
-
-✅ LightGBM classification
-
-✅ SMOTE within Cross Validation
-
-✅ SHAP explainability
-
-✅ Noise robustness testing
+LinkedIn: https://www.linkedin.com/in/tamil-arasan-a2466b274
 
 ## Weekly Roadmap
 
