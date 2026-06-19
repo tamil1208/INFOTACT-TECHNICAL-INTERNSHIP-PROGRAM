@@ -91,17 +91,16 @@ The projects are designed to simulate the workflow followed by deep-tech startup
 └── README.md
 ```
 
----
-#🚀 Manufacturing & Automotive – Contextual Predictive Maintenance (IoT Edge AI)
+# 📌 Project 1: Manufacturing & Automotive – Contextual Predictive Maintenance (IoT Edge AI)
 
-#🚀 Contextual Predictive Maintenance using IoT Edge AI
+# 🚀 Contextual Predictive Maintenance using IoT Edge AI
 Advanced Data Science & Machine Learning Project
 
-#🔗 Live Dashboard: https://predictivemaintencedashborad.netlify.app/
+# 🔗 Live Dashboard: https://predictivemaintencedashborad.netlify.app/
 
 ## Advanced Data Science & Machine Learning Project
 
-> Predicting machine failures before they occur using IoT telemetry, feature engineering, machine learning, and Explainable AI.
+>  Predicting machine failures before they occur using IoT telemetry, feature engineering, machine learning, and Explainable AI.
 
 ---
 
