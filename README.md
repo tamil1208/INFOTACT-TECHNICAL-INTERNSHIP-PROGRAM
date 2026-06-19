@@ -92,6 +92,85 @@ The projects are designed to simulate the workflow followed by deep-tech startup
 ```
 
 ---
+🚀 Manufacturing & Automotive – Contextual Predictive Maintenance (IoT Edge AI)
+
+🔗 Live Dashboard: https://predictivemaintencedashborad.netlify.app/
+
+📌 Project Overview
+
+This project focuses on Predictive Maintenance for Manufacturing and Automotive Industries using the AI4I 2020 dataset. The dashboard analyzes IoT sensor data from industrial machines to predict potential failures, reduce downtime, and improve maintenance planning. The solution combines Machine Learning, Explainable AI (SHAP), and interactive visual analytics.
+
+🎯 Objectives
+Monitor machine health using real-time sensor data
+Detect potential machine failures before they occur
+Analyze failure patterns and root causes
+Provide explainable predictions using SHAP
+Support maintenance decision-making with actionable insights
+📊 Dataset
+AI4I 2020 Predictive Maintenance Dataset
+10,000 machine cycles
+339 failure events
+5 failure modes:
+Tool Wear Failure (TWF)
+Heat Dissipation Failure (HDF)
+Power Failure (PWF)
+Overstrain Failure (OSF)
+Random Failure (RNF)
+🛠️ Technologies Used
+Python
+Pandas
+NumPy
+Scikit-Learn
+Random Forest
+XGBoost
+SHAP
+Plotly
+Power BI Concepts
+HTML, CSS, JavaScript
+Netlify Deployment
+🔍 Feature Engineering
+
+Created additional features to improve model performance:
+
+Temperature Difference
+Power Estimate (RPM × Torque)
+Tool Wear Rate
+🤖 Machine Learning Models
+Model	Accuracy
+Logistic Regression	85.95%
+Random Forest	98.60% ⭐
+XGBoost	98.35%
+
+Best Model: Random Forest
+
+Precision: 90%
+F1 Score: 76.27%
+Cross Validation F1: 78.01%
+📈 Dashboard Features
+Executive Overview
+Sensor Monitoring
+Feature Engineering Analysis
+Model Performance Dashboard
+Explainable AI (SHAP)
+Failure Prediction System
+Maintenance Recommendations
+Business Insights
+🔬 Explainable AI
+
+SHAP analysis is used to:
+
+Identify important features
+Explain prediction outcomes
+Understand machine failure drivers
+Improve model transparency
+💡 Key Insights
+Heat Dissipation Failure (HDF) is the most common failure mode.
+High torque significantly increases failure probability.
+Tool wear is a strong indicator of machine breakdown.
+Random Forest provides the best overall performance.
+🌐 Live Demo
+
+🔗 https://predictivemaintencedashborad.netlify.app
 
 # 📌 Project 1: Contextual Predictive Maintenance (IoT Edge AI)
 
@@ -121,20 +200,6 @@ to predict machine failures before they occur.
 ✅ SHAP explainability
 
 ✅ Noise robustness testing
-
----
-
-## Evaluation Metric
-
-**Target Macro F1 Score:**
-
-```
-Macro F1 ≥ 0.85
-```
-
-even under moderate noise conditions.
-
----
 
 ## Weekly Roadmap
 
