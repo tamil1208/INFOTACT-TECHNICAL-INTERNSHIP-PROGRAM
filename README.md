@@ -19,9 +19,9 @@ The internship focuses on solving real-world business problems using modern AI t
 The projects are designed to simulate the workflow followed by deep-tech startups and AI teams, emphasizing:
 
 * End-to-end ML pipelines
-* Weekly engineering sprints
+* Weekly engineering sprints 
 * Experiment tracking
-* GitHub issue management
+* GitHub issue management 
 * Version control best practices
 * Production-oriented development
 
