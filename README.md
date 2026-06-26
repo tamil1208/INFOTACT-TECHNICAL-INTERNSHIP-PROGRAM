@@ -79,6 +79,7 @@ The projects are designed to simulate the workflow followed by deep-tech startup
 
 # 📂 Repository Structure
 
+
 ```
 ├── Project-1-IoT-Predictive-Maintenance/
 ├── Project-2-Dynamic-Pricing-RL/
