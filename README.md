@@ -26,57 +26,56 @@ The projects are designed to simulate the workflow followed by deep-tech startup
 * Production-oriented development
 
 ----
-
-# 🛠 Tech Stack
+## 🛠 Tech Stack
 
 ### Languages
 
-* Python 3.11
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
 ### Machine Learning
 
-* Scikit-learn
-* LightGBM
-* XGBoost
-* Imbalanced-learn (SMOTE)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
+![LightGBM](https://img.shields.io/badge/LightGBM-00A65A?style=for-the-badge)
+![XGBoost](https://img.shields.io/badge/XGBoost-AA0000?style=for-the-badge)
+![SMOTE](https://img.shields.io/badge/Imbalanced--Learn-SMOTE-blue?style=for-the-badge)
 
 ### Deep Learning
 
-* PyTorch
-* DGL / PyTorch Geometric
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
+![DGL](https://img.shields.io/badge/DGL-Graph%20Learning-009688?style=for-the-badge)
+![PyTorch Geometric](https://img.shields.io/badge/PyTorch%20Geometric-GNN-orange?style=for-the-badge)
 
 ### Reinforcement Learning
 
-* Gymnasium / OpenAI Gym
-* DQN
-* Q-Learning
-* PPO (Optional)
+![Gymnasium](https://img.shields.io/badge/Gymnasium-0081CB?style=for-the-badge)
+![OpenAI Gym](https://img.shields.io/badge/OpenAI%20Gym-412991?style=for-the-badge)
+![DQN](https://img.shields.io/badge/DQN-Reinforcement%20Learning-red?style=for-the-badge)
+![Q-Learning](https://img.shields.io/badge/Q--Learning-RL-success?style=for-the-badge)
+![PPO](https://img.shields.io/badge/PPO-Optional-lightgrey?style=for-the-badge)
 
 ### Geospatial Analytics
 
-* GeoPandas
-* Shapely
-* Folium
-* Kepler.gl
+![GeoPandas](https://img.shields.io/badge/GeoPandas-139C5A?style=for-the-badge)
+![Shapely](https://img.shields.io/badge/Shapely-Geospatial-green?style=for-the-badge)
+![Folium](https://img.shields.io/badge/Folium-77B829?style=for-the-badge)
+![Kepler.gl](https://img.shields.io/badge/Kepler.gl-00AAA6?style=for-the-badge)
 
 ### Visualization
 
-* Matplotlib
-* Seaborn
-* SHAP
+![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?style=for-the-badge)
+![Seaborn](https://img.shields.io/badge/Seaborn-4C72B0?style=for-the-badge)
+![SHAP](https://img.shields.io/badge/SHAP-Explainable%20AI-FF6F00?style=for-the-badge)
 
 ### Deployment
 
-* Streamlit
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 
 ### Version Control
 
-* Git
-* GitHub Projects
-* GitHub Issues
-
-----
-
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![GitHub Projects](https://img.shields.io/badge/GitHub%20Projects-2088FF?style=for-the-badge&logo=github)
+![GitHub Issues](https://img.shields.io/badge/GitHub%20Issues-181717?style=for-the-badge&logo=github)
 # 📂 Repository Structure
 
 
