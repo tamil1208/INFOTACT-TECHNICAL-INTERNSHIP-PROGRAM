@@ -69,6 +69,7 @@ The projects are designed to simulate the workflow followed by deep-tech startup
 ### Deployment
 
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)
 
 ### Version Control
 
