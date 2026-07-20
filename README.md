@@ -161,6 +161,60 @@ Industrial IoT Sensor Data
 - Correlation Report
 - Feature Engineering Report
 
+## Week 1 — Day 3 Progress
+
+### Completed
+
+- Built baseline Random Forest model
+- Performed train-test split
+- Generated classification report
+- Created confusion matrix
+- Analyzed feature importance
+
+### New Features
+
+- Temperature difference
+- Power proxy feature
+
+### Outcome
+
+Successfully trained first predictive maintenance model and evaluated performance.
+
+## Week 1 — Day 4 Progress
+
+### Completed
+
+- Studied class imbalance
+- Applied SMOTE oversampling
+- Trained improved Random Forest model
+- Compared model performance
+- Evaluated confusion matrix
+
+### Outcome
+
+Improved handling of rare machine failure cases through data balancing techniques.
+
+## Week 1 — Day 5 Progress
+
+### Completed
+
+- Simulated external contextual data
+- Ambient temperature generation
+- Factory load simulation
+- Humidity simulation
+- Contextual feature engineering
+
+### Ablation Study
+
+Compared:
+
+1. Internal telemetry only
+2. Telemetry + contextual signals
+
+### Outcome
+
+Verified impact of contextual variables on predictive maintenance performance.
+
 ---
 
 ## ✅ Week 2 — Contextual Feature Engineering
